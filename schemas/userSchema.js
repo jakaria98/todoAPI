@@ -17,4 +17,4 @@ const userSchema = mongoose.Schema({
 });
 
 const User = new mongoose.model('User', userSchema);
-module.exports = Todo;
+module.exports = User;
