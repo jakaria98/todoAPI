@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const Todo = require('../schemas/todoSchema');
+const User = require('../schemas/userSchema');
 const checkLogin = require('../middlewares/checkLogin');
 //get all todo
 router.get('/', checkLogin, async (req, res) => {
     try {
-        const result = await Todo.find();
+        const result = await Todo.find().populate('user', 'name userName -_id');
         res.status(200).json({
             message: 'Data fetched Successfully',
             result,
@@ -19,7 +20,7 @@ router.get('/', checkLogin, async (req, res) => {
 //get a todo by id
 router.get('/:id', checkLogin, async (req, res) => {
     try {
-        const result = await Todo.findById(req.params.id);
+        const result = await Todo.findById(req.params.id).populate('user', 'name userName -_id');
         res.status(200).json({
             message: 'Data fetched Successfully',
             result,
@@ -33,9 +34,22 @@ router.get('/:id', checkLogin, async (req, res) => {
 
 //post a todo
 router.post('/', checkLogin, async (req, res) => {
-    const newTodo = new Todo(req.body);
+    const newTodo = new Todo({
+        ...req.body,
+        user: req.userId,
+    });
     try {
-        await newTodo.save();
+        const todo = await newTodo.save();
+        await User.updateOne(
+            {
+                _id: req.userId,
+            },
+            {
+                $push: {
+                    todos: todo._id,
+                },
+            }
+        );
         res.status(200).json({
             message: 'Todo created',
         });

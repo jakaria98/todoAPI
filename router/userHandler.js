@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
                 );
                 res.status(200).json({
                     message: 'User Logged in',
-                    token,
+                    token: `Bearer ${token}`,
                 });
             } else {
                 res.status(401).json({
@@ -54,6 +54,20 @@ router.post('/login', async (req, res) => {
         console.log(err.message);
         res.status(500).json({
             message: 'Authentication Failed',
+        });
+    }
+});
+router.get('/all', async (req, res) => {
+    try {
+        const users = User.find({}).populate('Todo');
+        res.status(200).json({
+            message: 'Success',
+            users,git status
+        });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({
+            message: 'server error',
         });
     }
 });

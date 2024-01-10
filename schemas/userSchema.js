@@ -7,13 +7,18 @@ const userSchema = mongoose.Schema({
     },
     userName: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
         required: true,
     },
-
+    todos: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'Todo',
+        },
+    ],
 });
 
 const User = new mongoose.model('User', userSchema);
