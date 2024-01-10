@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 //get a todo by id
 router.get('/:id', async (req, res) => {
     try {
-        const result = await Todo.findById(req.params.id);
+        const result = await Todo.findById( req.params.id);
         res.status(200).json({
             message: 'Data fetched Successfully',
             result,
