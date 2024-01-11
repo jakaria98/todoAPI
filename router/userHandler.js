@@ -62,7 +62,7 @@ router.get('/all', async (req, res) => {
         const users = User.find({}).populate('Todo');
         res.status(200).json({
             message: 'Success',
-            users,git status
+            users,
         });
     } catch (err) {
         console.log(err.message);
